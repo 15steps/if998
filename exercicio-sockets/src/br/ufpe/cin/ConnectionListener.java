@@ -5,20 +5,30 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ConnectionListener {
-    private Socket socket;
+/**
+ * Aguarda novas mensagens e imprime no console
+ */
+public class ConnectionListener implements Runnable {
+    private final Socket socket;
 
     public ConnectionListener(Socket socket) {
         this.socket = socket;
     }
 
-    public void listen() throws IOException {
-        var in = new BufferedReader(new InputStreamReader(
-                this.socket.getInputStream()));
-        String input = null;
-        do {
-            input = in.readLine();
-            System.out.println("Nova mensagem: " + input);
-        } while (input != null);
+    private void listen() {
+        try (var in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()))) {
+            String input;
+            do {
+                input = in.readLine();
+                System.out.println("Nova mensagem: " + input);
+            } while (input != null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run() {
+        listen();
     }
 }
