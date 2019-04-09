@@ -1,0 +1,5 @@
+module.exports = {
+    REGISTER: 'REGISTER',
+    REGISTER_SUCCESS: 'REGISTER_SUCCESS', 
+    NEW_MESSAGE: 'NEW_MESSAGE' 
+}
