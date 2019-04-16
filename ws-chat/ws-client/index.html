@@ -11,11 +11,26 @@
 </head>
 
 <body>
-    <div>
-        <div id="groups">
+    <div style="display: flex; height: 100vh">
+        <div style="flex: 1; background-color: rgba(0,0,0,0.12); padding: 20px">
+            <input placeholder="Group Id" id="groupIdInput" />
+            <button id="createGroup">Create Group</button>
+            <div>
+                <h3 style="display: inline">Username:</h3>
+                <span id="username"></span>
+            </div>
+            <h3>Groups:</h3>
+            <div>
+                <ul id="groups"></ul>
+            </div>
         </div>
-        <input placeholder="Group Id" id="groupIdInput" />
-        <button id="createGroup">Create Group</button>
+        <div style="flex: 3; padding: 20px; display: flex; flex-direction: column">
+            <h3 id="chat-name">Chat</h3>
+            <div id="chat" style="flex: 1; overflow-y: auto"></div>
+            <div>
+                <input id="chat-input" placeholder="Send message..." style="width: 100%" onkeypress="sendMessage(event)"/>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -24,15 +39,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script>
+        var username = prompt('Username: ');
+        $('#username').text(username);
         var connection = new WebSocket('ws://localhost:8080/chat');
+        var selectedGroup;
 
         connection.onopen = function () {
-            console.log('Connection open!');
-            connection.send(JSON.stringify({
-                type: 'NEW_MESSAGE',
-                text: 'Hello world',
-                groupId: 'group1'
-            }))
         }
         connection.onclose = function () {
             console.log('Connection closed');
@@ -40,11 +52,15 @@
         connection.onmessage = function (e) {
             var server_message = e.data;
             var msg = JSON.parse(server_message);
+            console.log(msg);
             switch(msg.type) {
                 case 'REGISTER_SUCCESS':
-                    
+                    renderGroups(msg.groups);
+                    break;
+                case 'NEW_MESSAGE':
+                    handleNewMessage(msg);
+                    break;
             }
-            console.log(msg);
         }
 
         $('#createGroup').on('click', function() {
@@ -54,8 +70,59 @@
             }
             connection.send(JSON.stringify(registerData));
         })
-        function handleNewGroup() {
 
+        function handleNewMessage(msg) {
+            if (msg.groupId === selectedGroup) {
+                $('#chat')
+                .html(msg.messages.map(message => {
+                    if (message.username === username)
+                        return $('<div></div>').text(message.text).css('text-align', 'right');
+                    else
+                        return $('<div></div>')
+                            .append($('<span><span>').text(message.username + ': ').css('font-weight', 'bold'))
+                            .append($('<span><span>').text(message.text))
+                }))
+            }
+        }
+
+        function renderGroups(groups) {
+            $('#groups').html(function() {
+                return groups.map(group => {
+                    return $('<li></li>')
+                        .html(
+                            $('<a></a>')
+                            .text(group)
+                            .on('click', () => enterChatGroup(group))
+                            .attr('href', '#')
+                        );
+                })
+            })
+        }
+
+        function sendMessage(e) {
+            if (e.keyCode !== 13) {
+                return;
+            }
+            if (!selectedGroup) alert('Selecione um grupo!');
+            else {
+                var text = $('#chat-input').val();
+                connection.send(JSON.stringify({
+                    type: 'NEW_MESSAGE',
+                    text: text,
+                    groupId: selectedGroup,
+                    username: username
+                }));
+                $('#chat-input').val('');
+            }
+        }
+
+        function enterChatGroup(group) {
+            selectedGroup = group;
+            $('#chat-name').text(`Chat - ${group}`)
+            connection.send(JSON.stringify({
+                type: 'REGISTER',
+                groupId: selectedGroup
+            }))
         }
     </script>
 </body>

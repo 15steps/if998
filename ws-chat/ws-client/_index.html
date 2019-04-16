@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        var connection = new WebSocket('ws://localhost:8080/chat');
+        connection.onopen = function () {
+            console.log('Connection open!');
+            // connection.send(JSON.stringify({
+            //     type: 'NEW_MESSAGE',
+            //     text: 'Hello world',
+            //     groupId: 'group1'
+            // }))
+        }
+        connection.onmessage = function (e) {
+            var server_message = e.data;
+            var msg = JSON.parse(server_message);
+            console.log(msg);
+            switch(msg.type) {
+                case 'REGISTER_SUCCESS':
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // $('#createGroup').on('click', function() {
+        //     var registerData = {
+        //         type: 'REGISTER',
+        //         groupId: $('#groupIdInput').val(),
+        //     }
+        //     connection.send(JSON.stringify(registerData));
+        // })
+        class App extends ReactDOM.Component {
+            constructor(props) {
+                super(props)
+            }
+        }
+        function render() {
+            return (
+                <div style={{display: 'flex'}}>
+                    <div>
+                        <input placeholder="Group name"/>
+                        <button>Join</button>
+                    </div>
+                    <h2>HEEEY</h2>
+                </div>
+            )
+        }
+        ReactDOM.render(
+        render(),
+        document.getElementById('root')
+      );
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this section for a production-ready setup with JSX:
+      https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+      In a larger project, you can use an integrated toolchain that includes JSX instead:
+      https://reactjs.org/docs/create-a-new-react-app.html
+
+      You can also use React without JSX, in which case you can remove Babel:
+      https://reactjs.org/docs/react-without-jsx.html
+    -->
+</body>
+
+</html>

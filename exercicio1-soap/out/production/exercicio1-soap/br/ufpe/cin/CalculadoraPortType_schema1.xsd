@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://cin.ufpe.br/" xmlns:tns="http://cin.ufpe.br/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="adicionar" type="tns:adicionar"/>
+
+  <xs:element name="adicionarResponse" type="tns:adicionarResponse"/>
+
+  <xs:element name="dividir" type="tns:dividir"/>
+
+  <xs:element name="dividirResponse" type="tns:dividirResponse"/>
+
+  <xs:element name="multiplicar" type="tns:multiplicar"/>
+
+  <xs:element name="multiplicarResponse" type="tns:multiplicarResponse"/>
+
+  <xs:element name="subtrair" type="tns:subtrair"/>
+
+  <xs:element name="subtrairResponse" type="tns:subtrairResponse"/>
+
+  <xs:complexType name="subtrair">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element name="arg1" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="subtrairResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="multiplicar">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element name="arg1" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="multiplicarResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dividir">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element name="arg1" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dividirResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="adicionar">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element name="arg1" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="adicionarResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+
