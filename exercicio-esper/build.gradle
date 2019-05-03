@@ -22,3 +22,13 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+task runExercicio1(type: JavaExec) {
+    main = "br.ufpe.cin.exercicios.Exercicio1"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runExercicio2(type: JavaExec) {
+    main = "br.ufpe.cin.exercicios.Exercicio2"
+    classpath = sourceSets.main.runtimeClasspath
+}
