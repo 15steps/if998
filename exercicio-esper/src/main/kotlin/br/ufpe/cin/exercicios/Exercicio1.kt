@@ -10,7 +10,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.Config.log
 
 data class TemperatureEvent(val value: Double)
 
-fun main() {
+fun main(args: Array<String>) {
     val stmt1 = buildStatement<TemperatureEvent>(
         "average-100-last",
         "select avg(value) as average from TemperatureEvent#length(100)"

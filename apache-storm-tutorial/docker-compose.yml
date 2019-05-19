@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  zookeeper:
+    image: zookeeper
+    restart: always
+    networks:
+      - skynet
+
+  nimbus:
+    image: storm
+    restart: always
+    command: storm nimbus
+    networks:
+      - skynet
+
+  supervisor:
+    image: storm
+    restart: always
+    command: storm supervisor
+    networks:
+      - skynet
+
+  stormui:
+    image: storm
+    command: storm ui
+    ports:
+      - 8080:8080
+    networks:
+      - skynet
+
+networks:
+  skynet:
